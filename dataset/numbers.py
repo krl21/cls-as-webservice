@@ -1,10 +1,11 @@
 
-from typing import TypeVar
+import numpy as np
 
+from typing import TypeVar
 T = TypeVar('T')
 
 
-def load(train_parameters: tuple[int, int, int], test_parameters: tuple[int, int, int], preprocess : callable = None) -> tuple[list[T], list[str], list[T], list[str]]:
+def load(train_parameters: tuple[int, int, int], test_parameters: tuple[int, int, int], preprocess : callable = None) -> tuple[np.ndarray[T], np.ndarray[str], np.ndarray[T], np.ndarray[str]]:
     """Loads data from a source based on train and test data ranges.
 
     Args:
@@ -17,7 +18,7 @@ def load(train_parameters: tuple[int, int, int], test_parameters: tuple[int, int
         ValueError: Invalid test data range. Start index cannot be greater than end index with a positive step or vice versa.
 
     Returns:
-        tuple[list[Any], list[str], list[Any], list[str]]: 
+        tuple[np.array[Any], np.array[str], np.array[Any], np.array[str]]: 
             A tuple containing four elements:
                 - Training data (list of values)
                 - Training labels (list of strings)
@@ -37,7 +38,7 @@ def load(train_parameters: tuple[int, int, int], test_parameters: tuple[int, int
         
     return _load(train_parameters, test_parameters, preprocess)
 
-def _load(train_parameters: tuple[int, int, int], test_parameters: tuple[int, int, int], preprocess : callable) -> tuple[list[T], list[str], list[T], list[str]]:
+def _load(train_parameters: tuple[int, int, int], test_parameters: tuple[int, int, int], preprocess : callable) -> tuple[np.ndarray[T], np.ndarray[str], np.ndarray[T], np.ndarray[str]]:
     """Loads data from a source based on train and test data ranges.
 
     Args:
@@ -46,7 +47,7 @@ def _load(train_parameters: tuple[int, int, int], test_parameters: tuple[int, in
         preprocess (function, optional): A function for data preprocessing and representing. Defaults to None. if the value is None, the `number2remainder` function will be taken to represent the values.
 
     Returns:
-        tuple[list[Any], list[str], list[Any], list[str]]: 
+        tuple[np.array[Any], np.array[str], np.array[Any], np.array[str]]: 
             A tuple containing four elements:
                 - Training data (list of values)
                 - Training labels (list of strings)
@@ -57,10 +58,10 @@ def _load(train_parameters: tuple[int, int, int], test_parameters: tuple[int, in
     training_values = [i for i in range(train_parameters[0], train_parameters[1] + 1, train_parameters[2])]
     test_values = [i for i in range(test_parameters[0], test_parameters[1] + 1, test_parameters[2])]
     
-    return [preprocess(i) for i in training_values], \
-        [_classify(i) for i in training_values], \
-        [preprocess(i) for i in test_values], \
-        [_classify(i) for i in test_values]
+    return np.array([preprocess(i) for i in training_values]), \
+        np.array([_classify(i) for i in training_values]), \
+        np.array([preprocess(i) for i in test_values]), \
+        np.array([_classify(i) for i in test_values])
 
 
 def _classify(n: int) -> str:
