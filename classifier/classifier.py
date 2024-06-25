@@ -21,7 +21,7 @@ from typing import TypeVar
 T = TypeVar('T')
 R = TypeVar('R')
 
-from tools import create_directory
+from tools import create_directory, most_frequent
 
 
 class MyClassifier: 
@@ -158,7 +158,37 @@ class MyClassifier:
                     model = pickle.load(f)
                     self.models[model_name] = model
         
+    def predict(self, value: T, preprocess: callable, model_name: str = None) -> R:
+        """Predicts the output for a given value using a model or ensemble of models.
 
+        Args:
+            value (T): 
+                The input value for prediction.
+            preprocess (callable): 
+                A function that preprocesses the input value.
+            model_name (str, optional): 
+                The name of the specific model to use for prediction. If None, the most frequent prediction from all models is returned.
+                
+        Raises:
+            ValueError: 
+                If an unknown model name is provided.
+
+        Returns:
+            R: 
+                The predicted output value.
+    
+        """
+        value = preprocess([value])
+        
+        if model_name is None:
+            return most_frequent([model.predict(value)[0] for model in self.models.values()])
+        else:
+            if model_name in self.models.keys():
+                return self.models[model_name].predict(value)[0]
+            else:
+                raise ValueError('Unknown model name')
+    
+    
 
 def initialize_model(model_name: str) -> callable:
     """Initializes a machine learning model based on the provided name.
