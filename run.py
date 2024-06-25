@@ -1,6 +1,6 @@
 
-from dataset.numbers import load, number2remainder
-from classifier import MyClassifier
+from logic.dataset.numbers import load, number2remainder
+from logic.classifier import MyClassifier
 
 
 data = load((1000, 2000, 1), (1, 100, 1))

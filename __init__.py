@@ -1,3 +1,2 @@
 
-from .dataset import *
-from .classifier import *
+from logic import *

@@ -21,7 +21,7 @@ from typing import TypeVar
 T = TypeVar('T')
 R = TypeVar('R')
 
-from tools import create_directory, most_frequent
+from ..tools import create_directory, most_frequent
 
 
 class MyClassifier: 
