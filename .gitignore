@@ -162,9 +162,9 @@ cython_debug/
 #.idea/
 
 # VsCode
-.vscode/
+.vscode
 
 .DS_Store
 
 # Folder containing the saves of the models
-.models/
+.models
