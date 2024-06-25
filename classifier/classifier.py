@@ -58,15 +58,19 @@ class MyClassifier:
                 A tuple containing training data (X_train, y_train) and testing data (X_test, y_test).
             
         """
-        kfold = KFold(n_splits=5, shuffle=True, random_state=42)
+        relation = dict()
         
         print('### BUILDING MODELS ###')
         for model_name in self.model_names:
-            self._evaluate_model(model_name, *dataset[:2])
-            self._train_model(model_name, dataset)
-            print('')
+            relation[model_name] = self._evaluate_model(model_name, *dataset[:2])
+            
+        print('\n### TAKING THE BEST MODELS ###')
+        max_value = max(relation.values())
+        for model_name, value in relation.items():
+            if value == max_value:
+                self._train_model(model_name, dataset)
         
-    def _evaluate_model(self, model_name: str, X_train: np.ndarray[T], y_train: np.ndarray[R]) -> None:
+    def _evaluate_model(self, model_name: str, X_train: np.ndarray[T], y_train: np.ndarray[R]) -> float:
         """
         Evaluates the accuracy of the model using K-fold cross-validation.
 
@@ -77,6 +81,10 @@ class MyClassifier:
                 Training data features.
             y_train (np.ndarray[R]): 
                 Training data labels.
+                
+        Return:
+            float: 
+                The average accuracy of the model.
 
         """
         kfold = KFold(n_splits=min(10, len(X_train)), shuffle=True, random_state=42)
@@ -95,7 +103,10 @@ class MyClassifier:
 
             accuracies.append(accuracy_score(ytest, model.predict(Xtest)))
 
-        print(f'  Using K-fold. Model: {model_name}. Average accuracy: {np.mean(accuracies)}')
+        average = np.mean(accuracies)
+        print(f'  Using K-fold. Model: {model_name}. Average accuracy: {average}')
+        
+        return average
             
     def _train_model(self, model_name: str, dataset: tuple[np.ndarray[T], np.ndarray[R], np.ndarray[T], np.ndarray[R]]) -> None:
         """Trains a model using the provided dataset.
