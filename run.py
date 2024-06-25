@@ -4,9 +4,13 @@ from classifier import MyClassifier
 
 data = numbers_dataset.load((10, 15, 1), (1, 2, 1))
 
-cls = MyClassifier()
-cls.build_models(data)
+dir_path = './models'
 
-print(list(cls.models.items()))
+
+cls = MyClassifier()
+# cls.build_models(data)
+# cls.save_models(dir_path)
+cls.load_models(dir_path)
 
 print('Hello you!')
+

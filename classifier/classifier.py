@@ -2,6 +2,10 @@
 
 import numpy as np
 
+import pickle
+from os import path
+from os import listdir
+
 from sklearn.model_selection import KFold
 
 from sklearn.linear_model import LogisticRegression
@@ -16,6 +20,8 @@ from sklearn.metrics import accuracy_score
 from typing import TypeVar
 T = TypeVar('T')
 R = TypeVar('R')
+
+from tools import create_directory
 
 
 class MyClassifier: 
@@ -110,6 +116,48 @@ class MyClassifier:
         
         self.models[model_name] = model
 
+    def save_models(self, dir_path: str) -> None:
+        """
+        Saves the trained models to the specified directory
+
+        Args:
+            dir_path (str): 
+                The path of the directory to save the models.
+
+        Raises:
+            OSError: 
+                If an error occurs while creating the directory or saving the models.
+            
+        """
+        create_directory(dir_path)
+        
+        for model_name, model in self.models.items():
+            name = model_name + '.pkl'
+            with open(path.join(dir_path, name), 'wb') as f:
+                pickle.dump(model, f)
+    
+    def load_models(self, dir_path: str) -> None:
+        """
+        Loads trained models from the specified directory
+
+        Args:
+            dir_path (str): 
+                The path of the directory containing the saved models.
+
+        Raises:
+            OSError: 
+                If an error occurs while loading the models.
+            FileNotFoundError: 
+                If a model file is not found for a given model name.
+            
+        """
+        for filename in listdir(dir_path):
+            if filename.endswith('.pkl'):
+                model_name, _ = path.splitext(filename)
+                with open(path.join(dir_path, filename), 'rb') as f:
+                    model = pickle.load(f)
+                    self.models[model_name] = model
+        
 
 
 def initialize_model(model_name: str) -> callable:
