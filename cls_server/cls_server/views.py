@@ -94,7 +94,7 @@ def _process_logic(data: dict):
         ]
     }
 
-def list_classifiers(request: HttpRequest) -> HttpResponse:
+def list_classifiers(request):
     """Lists the available classifier models
 
     Args:
