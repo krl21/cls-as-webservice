@@ -17,17 +17,17 @@ from sklearn.naive_bayes import GaussianNB
 
 from sklearn.metrics import accuracy_score
 
+from ..tools import create_directory, most_frequent
+
 from typing import TypeVar
 T = TypeVar('T')
 R = TypeVar('R')
-
-from ..tools import create_directory, most_frequent
 
 
 class MyClassifier: 
     
     def __init__(self):
-        self.model_names = ['logistic_regression', 'svc', 'decision_tree', 'random_forest', 'knn', 'naive_bayes']
+        self.generic_models = ['logistic_regression', 'svc', 'decision_tree', 'random_forest', 'knn', 'naive_bayes']
         self.models = dict()
     
     def build_models(self, dataset: tuple[np.ndarray[T], np.ndarray[R], np.ndarray[T], np.ndarray[R]]):
@@ -61,7 +61,7 @@ class MyClassifier:
         relation = dict()
         
         print('### BUILDING MODELS ###')
-        for model_name in self.model_names:
+        for model_name in self.generic_models:
             relation[model_name] = self._evaluate_model(model_name, *dataset[:2])
             
         print('\n### TAKING THE BEST MODELS ###')
@@ -199,6 +199,14 @@ class MyClassifier:
             else:
                 raise ValueError('Unknown model name')
     
+    def model_names(self) -> list[str]:
+        """Returns the models used by the class to predict
+        
+        Return:
+            list[str]: Models name.
+        
+        """
+        return list(self.models.keys())
     
 
 def initialize_model(model_name: str) -> callable:
