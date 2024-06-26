@@ -64,7 +64,7 @@ def _valid_structure(json: dict) -> None:
 
     if 'model_name' in json:
         print(classifier.model_names())
-        assert json['model_name'] in classifier.model_names() , "Model name is not recognized"
+        assert json['model_name'] in classifier.models_name() , "Model name is not recognized"
     
 def _process_logic(data: dict):
     """Processes input data and returns classifications
@@ -94,5 +94,26 @@ def _process_logic(data: dict):
         ]
     }
 
-def list_classifiers():
-    pass
+def list_classifiers(request: HttpRequest) -> HttpResponse:
+    """Lists the available classifier models
+
+    Args:
+        request (HttpRequest): Data
+
+    Returns:
+        HttpResponse: A Django HttpResponse object with the JSON response data (the names of the valid models)
+  
+    """
+    json_data = json.dumps({
+            'success': True, 
+            'result': {
+                'models': classifier.models_name()
+            }
+        }) 
+    
+    return HttpResponse(
+        json_data, 
+        content_type='application/json'
+    )
+
+    
