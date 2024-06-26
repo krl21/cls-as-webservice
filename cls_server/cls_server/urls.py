@@ -21,7 +21,7 @@ from . import views
 
 urlpatterns = [
     # path("admin/", admin.site.urls),
-    path('api_classifier/', views.procesar_json, name='procesar_json'),
+    path('api/number-classifier/', views.process_data , name='process_data '),
 ]
     
 

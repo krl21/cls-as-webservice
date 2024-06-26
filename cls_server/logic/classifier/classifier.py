@@ -189,7 +189,13 @@ class MyClassifier:
                 The predicted output value.
     
         """
-        value = preprocess([value])
+        
+        print('valor original:', value) 
+        print(type(value))
+        
+        value = preprocess(value)
+        
+        print('valor procesado:', value) 
         
         if model_name is None:
             return most_frequent([model.predict(value)[0] for model in self.models.values()])
