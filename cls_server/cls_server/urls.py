@@ -17,12 +17,12 @@ Including another URLconf
 # from django.contrib import admin
 from django.urls import path
 
-from . import views
+from . import views_cls
 
 urlpatterns = [
     # path("admin/", admin.site.urls),
-    path('api/number-classifier/', views.process_data , name='process_data'),
-    path('api/number-classifier/list_models/', views.list_classifiers , name='list_classifiers'),
+    path('api/number-classifier/', views_cls.process_data , name='process_data'),
+    path('api/number-classifier/list_models/', views_cls.list_classifiers , name='list_classifiers'),
 ]
     
 
