@@ -39,10 +39,7 @@ def predict_data(request):
             }
         })
 
-    return JsonResponse({
-        'success': True, 
-        'result': _process_logic(data)}
-    )
+    return JsonResponse(_process_logic(data))
 
 def _valid_structure(json: dict) -> None:
     """
@@ -84,23 +81,30 @@ def _process_logic(data: dict):
     """
     global classifier
     
-    
     try:
         model_name = data.get('model_name')
         result = {
-            'classification': [
-                (
-                    value, 
-                    classifier.predict(
+            'success': True,
+            'result':{
+                'classification': [
+                    (
                         value, 
-                        lambda x: [number2remainder(x)], 
-                        model_name
-                    )
-                ) for value in data['values']
-            ]
+                        classifier.predict(
+                            value, 
+                            lambda x: [number2remainder(x)], 
+                            model_name
+                        )
+                    ) for value in data['values']
+                ]
+            }
         }
     except Exception as error:
-        result = {'error_msg': str(error)}
+        result = {
+            'success': False, 
+            'result': {
+                'error_msg': str(error)
+            }
+        }
     
     return result
 
