@@ -7,7 +7,7 @@ python3.10 cls_server/manage.py runserver &
 sleep 5
 
 # Run the Django tests
-python3.10 cls_server/manage.py test tests
+python3.10 cls_server/manage.py test tests -v 2
 
 # Get the process ID (PID) of the main Django process
 server_pid=$(ps aux | grep manage.py | grep runserver | awk '{print $2}')
