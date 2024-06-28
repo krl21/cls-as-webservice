@@ -56,16 +56,16 @@ def _valid_structure(json: dict) -> None:
         AssertionError: If the structure of the dictionary is invalid.
     
     """
-    assert 'values' in json, "The 'values' key missing."
+    assert 'values' in json, "The 'values' key missing"
 
     values = json["values"]
-    assert isinstance(values, list), "The 'values' value must be a list."
+    assert isinstance(values, list), "The 'values' value must be a list"
 
     for elemento in values:
-        assert isinstance(elemento, int), "The 'values' elements must be integers."
+        assert isinstance(elemento, int), "The 'values' elements must be integers"
 
     if 'model_name' in json:
-        print(classifier.model_names())
+        global classifier
         assert json['model_name'] in classifier.models_name() , "Model name is not recognized"
     
 def _process_logic(data: dict):
@@ -82,19 +82,27 @@ def _process_logic(data: dict):
             Dictionary with the key 'classification' which contains a list of tuples (int, str). Each number corresponds to the one defined and the string is the classification obtained.
 
     """
-    model_name = data.get('model_name')
-    return {
-        'classification': [
-            (
-                value, 
-                classifier.predict(
+    global classifier
+    
+    
+    try:
+        model_name = data.get('model_name')
+        result = {
+            'classification': [
+                (
                     value, 
-                    lambda x: [number2remainder(x)], 
-                    model_name
-                )
-            ) for value in data['values']
-        ]
-    }
+                    classifier.predict(
+                        value, 
+                        lambda x: [number2remainder(x)], 
+                        model_name
+                    )
+                ) for value in data['values']
+            ]
+        }
+    except Exception as error:
+        result = {'error_msg': str(error)}
+    
+    return result
 
 def list_classifiers(request):
     """Lists the available classifier models
@@ -106,6 +114,8 @@ def list_classifiers(request):
         HttpResponse: A Django HttpResponse object with the JSON response data (the names of the valid models)
   
     """
+    global classifier
+    
     json_data = json.dumps({
             'success': True, 
             'result': {
