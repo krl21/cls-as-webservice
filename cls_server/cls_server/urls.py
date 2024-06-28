@@ -21,7 +21,7 @@ from . import views_cls
 
 urlpatterns = [
     # path("admin/", admin.site.urls),
-    path('api/number-classifier/', views_cls.process_data , name='process_data'),
+    path('api/number-classifier/predict/', views_cls.predict_data , name='predict_data'),
     path('api/number-classifier/list_models/', views_cls.list_classifiers , name='list_classifiers'),
 ]
     

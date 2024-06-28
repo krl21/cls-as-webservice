@@ -11,15 +11,17 @@ classifier = MyClassifier()
 classifier.build_models(load((1000, 2000, 1), (1, 100, 1)))
 
 
-def process_data(request):
+def predict_data(request):
     """
-    Petición web que recibe un JSON y devuelve otro JSON como respuesta.
+    Web request to classify a set of numbers
 
     Args:
-        request (HttpRequest): Objeto de solicitud HTTP.
+        request (HttpRequest): 
+            HTTP request object.
 
     Returns:
-        JsonResponse: Respuesta JSON con un diccionario como contenido.
+        JsonResponse: 
+            JSON response with a dictionary as content.
     """
 
     try:
